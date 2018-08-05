@@ -16,7 +16,6 @@ services:
           - ./examples/etl-example/sql/SQLG-WRAPUP.sql:/docker-entrypoint-initdb.d/SQLG-WRAPUP.sql
     webserver:
         image: puckel/docker-airflow:latest
-        #image: puckel/docker-airflow:1.8.0
         restart: always
         depends_on:
           - postgres
