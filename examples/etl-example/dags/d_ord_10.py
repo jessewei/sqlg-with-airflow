@@ -62,7 +62,7 @@ wait_for_cust_staging >> wait_for_prod_staging
 # wait_for_prod_staging >> sqlg_jobs.O_PRODUCT
 # wait_for_prod_staging >> sqlg_jobs.O_ORDERLINE
 O_ORDERLINE >> wait_for_prod_staging
-
+sqlg_jobs.O_ORDER_INFO >> O_ORDERLINE
 
 if __name__ == "__main__":
     sqlg_dag.sqlg_dag_d.cli()

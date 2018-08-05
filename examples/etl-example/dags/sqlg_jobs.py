@@ -55,6 +55,6 @@ O_ORDER_INFO = PostgresOperatorWithTemplatedParams(
 
 
 
-O_ORDER_INFO.set_upstream(O_CUSTOMER)
+O_ORDER_INFO >> O_CUSTOMER
 #O_ORDERLINE.set_upstream(O_ORDER_INFO) 
 #logging.info('trace 1', dag)
