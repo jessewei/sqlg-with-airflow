@@ -15,14 +15,6 @@ args = {
 
 tmpl_search_path = Variable.get("sql_path")
 
-# dag = airflow.DAG(
-#     'd_ord_10',
-#     schedule_interval="@daily",
-#     dagrun_timeout=timedelta(minutes=60),
-#     template_searchpath=tmpl_search_path,
-#     default_args=args,
-#     max_active_runs=1)
-
 dag = sqlg_dag.create_dag(tmpl_search_path, args)
 
 DB_NAME = 'DWH'
@@ -32,8 +24,10 @@ O_CUSTOMER = PostgresOperatorWithTemplatedParams(
     postgres_conn_id='postgres_dwh',
     sql=DB_NAME + '/' + my_taskid + '/' + my_taskid + '.sql',
     parameters={"window_start_date": "{{ ds }}", "window_end_date": "{{ tomorrow_ds }}"},
-    dag=dag,
+    #dag=dag,
+    start_date=airflow.utils.dates.days_ago(7),
     pool='postgres_dwh')
+
     
 my_taskid = 'O_PRODUCT'
 O_PRODUCT = PostgresOperatorWithTemplatedParams(
@@ -41,20 +35,30 @@ O_PRODUCT = PostgresOperatorWithTemplatedParams(
     postgres_conn_id='postgres_dwh',
     sql=DB_NAME + '/' + my_taskid + '/' + my_taskid + '.sql',
     parameters={"window_start_date": "{{ ds }}", "window_end_date": "{{ tomorrow_ds }}"},
-    dag=dag,
+    #dag=dag,
+    start_date=airflow.utils.dates.days_ago(7),
     pool='postgres_dwh')
 
+    
+my_taskid = 'O_ORDERLINE'    
+O_ORDERLINE = PostgresOperatorWithTemplatedParams(
+    task_id=my_taskid,
+    postgres_conn_id='postgres_dwh',
+    sql=DB_NAME + '/' + my_taskid + '/' + my_taskid + '.sql',
+    parameters={"window_start_date": "{{ ds }}", "window_end_date": "{{ tomorrow_ds }}"},
+    #dag=sqlg_dag.sqlg_dag_d,
+    start_date=airflow.utils.dates.days_ago(7),
+    pool='postgres_dwh')
+
+    
 my_taskid = 'O_ORDER_INFO'    
 O_ORDER_INFO = PostgresOperatorWithTemplatedParams(
     task_id=my_taskid,
     postgres_conn_id='postgres_dwh',
     sql=DB_NAME + '/' + my_taskid + '/' + my_taskid + '.sql',
     parameters={"window_start_date": "{{ ds }}", "window_end_date": "{{ tomorrow_ds }}"},
-    dag=dag,
+    #dag=dag,
+    start_date=airflow.utils.dates.days_ago(7),
     pool='postgres_dwh')
 
 
-
-O_ORDER_INFO >> O_CUSTOMER
-#O_ORDERLINE.set_upstream(O_ORDER_INFO) 
-#logging.info('trace 1', dag)

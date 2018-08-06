@@ -33,36 +33,35 @@ dag = sqlg_dag.create_dag(tmpl_search_path, args)
 
 #global dag
 DB_NAME = 'DWH'
-my_taskid = 'O_ORDERLINE'    
-O_ORDERLINE = PostgresOperatorWithTemplatedParams(
-    task_id=my_taskid,
-    postgres_conn_id='postgres_dwh',
-    sql=DB_NAME + '/' + my_taskid + '/' + my_taskid + '.sql',
-    parameters={"window_start_date": "{{ ds }}", "window_end_date": "{{ tomorrow_ds }}"},
-    dag=sqlg_dag.sqlg_dag_d,
-    pool='postgres_dwh')
+
     
 wait_for_cust_staging = ExternalTaskSensor(
     task_id='wait_for_cust_staging',
     external_dag_id='customer_staging',
     external_task_id='extract_customer',
     execution_delta=None,  # Same day as today
-    dag=sqlg_dag.sqlg_dag_d)
+    dag=dag)
 
 wait_for_prod_staging = ExternalTaskSensor(
     task_id='wait_for_prod_staging',
     external_dag_id='product_staging',
     external_task_id='extract_product',
     execution_delta=None,  # Same day as today
-    dag=sqlg_dag.sqlg_dag_d)
+    dag=dag)
 
 # logging.info('trace 2', sqlg_jobs.dag)
+sqlg_jobs.O_CUSTOMER.dag = dag
+sqlg_jobs.O_PRODUCT.dag = dag
+sqlg_jobs.O_ORDERLINE.dag = dag
+sqlg_jobs.O_ORDER_INFO.dag = dag
     
-wait_for_cust_staging >> wait_for_prod_staging
-# wait_for_prod_staging >> sqlg_jobs.O_PRODUCT
-# wait_for_prod_staging >> sqlg_jobs.O_ORDERLINE
-O_ORDERLINE >> wait_for_prod_staging
-sqlg_jobs.O_ORDER_INFO >> O_ORDERLINE
+#wait_for_cust_staging >> wait_for_prod_staging
+wait_for_cust_staging >> sqlg_jobs.O_CUSTOMER
+wait_for_prod_staging >> sqlg_jobs.O_PRODUCT
+sqlg_jobs.O_CUSTOMER >> sqlg_jobs.O_ORDER_INFO
+sqlg_jobs.O_PRODUCT >> sqlg_jobs.O_ORDER_INFO
+sqlg_jobs.O_ORDER_INFO >> sqlg_jobs.O_ORDERLINE
+
 
 if __name__ == "__main__":
     sqlg_dag.sqlg_dag_d.cli()
