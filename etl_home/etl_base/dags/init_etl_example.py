@@ -47,22 +47,31 @@ def initialize_etl_example():
         session.commit()
 
     create_new_conn(session,
-                    {"conn_id": "mssql",
-                     "conn_type": "MS SQL Server",
-                     "host": "mssql",
-                     "port": 1433,
-                     "schema": "master",
-                     "login": "sa",
-                     "password": "Th1sS3cret!"})
+                    {"conn_id": "postgres_oltp",
+                     "conn_type": "postgres",
+                     "host": "postgres",
+                     "port": 5432,
+                     "schema": "orders",
+                     "login": "oltp_read",
+                     "password": "oltp_read"})
 
+#   create_new_conn(session,
+#                   {"conn_id": "postgres_dwh",
+#                    "conn_type": "postgres",
+#                    "host": "postgres",
+#                    "port": 5432,
+#                    "schema": "dwh",
+#                    "login": "dwh_svc_account",
+#                    "password": "dwh_svc_account"})
+                    
     create_new_conn(session,
                     {"conn_id": "postgres_dwh",
                      "conn_type": "postgres",
                      "host": "postgres",
                      "port": 5432,
                      "schema": "dwh",
-                     "login": "dwh_svc_account",
-                     "password": "dwh_svc_account"})
+                     "login": "db_owner",
+                     "password": "db_owner"})
 
     new_var = models.Variable()
     new_var.key = "sql_path"
@@ -81,12 +90,12 @@ def initialize_etl_example():
     session.close()
 
 dag = airflow.DAG(
-    'init_mssql_example',
+    'init_docker_example',
     schedule_interval="@once",
     default_args=args,
     max_active_runs=1)
 
-t1 = PythonOperator(task_id='initialize_mssql_example',
+t1 = PythonOperator(task_id='initialize_etl_example',
                     python_callable=initialize_etl_example,
                     provide_context=False,
                     dag=dag)
