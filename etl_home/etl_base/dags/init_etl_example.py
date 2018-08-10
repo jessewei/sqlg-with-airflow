@@ -55,15 +55,7 @@ def initialize_etl_example():
                      "login": "oltp_read",
                      "password": "oltp_read"})
 
-#   create_new_conn(session,
-#                   {"conn_id": "postgres_dwh",
-#                    "conn_type": "postgres",
-#                    "host": "postgres",
-#                    "port": 5432,
-#                    "schema": "dwh",
-#                    "login": "dwh_svc_account",
-#                    "password": "dwh_svc_account"})
-                    
+    # change from dwh_svc_account to db_owner                
     create_new_conn(session,
                     {"conn_id": "postgres_dwh",
                      "conn_type": "postgres",
@@ -86,7 +78,6 @@ def initialize_etl_example():
 
     session.add(new_pool)
     session.commit()
-
     session.close()
 
 dag = airflow.DAG(

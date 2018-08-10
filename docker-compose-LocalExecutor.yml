@@ -9,11 +9,11 @@ services:
         ports:
           - 5432:5432
         volumes:
-          - ./examples/do-this-first/database_user.sql:/docker-entrypoint-initdb.d/database_user.sql
-          - ./examples/do-this-first/dwh_tables.sql:/docker-entrypoint-initdb.d/dwh_tables.sql
-          - ./examples/do-this-first/populate_tables.sql:/docker-entrypoint-initdb.d/populate_tables.sql
-          - ./examples/etl-example/sql/HOME-MERGE.ddl:/docker-entrypoint-initdb.d/HOME-MERGE.ddl
-          - ./examples/etl-example/sql/SQLG-WRAPUP.sql:/docker-entrypoint-initdb.d/SQLG-WRAPUP.sql
+          - ./etl_home/bin/initial/database_user.sql:/docker-entrypoint-initdb.d/database_user.sql
+          - ./etl_home/bin/initial/dwh_tables.sql:/docker-entrypoint-initdb.d/dwh_tables.sql
+          - ./etl_home/bin/initial/populate_tables.sql:/docker-entrypoint-initdb.d/populate_tables.sql
+          #- ./etl_home/etl_base/sql/DEMO-MERGE.ddl:/docker-entrypoint-initdb.d/DEMO-MERGE.ddl
+          #- ./etl_home/bin/initial/SQLG-WRAPUP.sql:/docker-entrypoint-initdb.d/SQLG-WRAPUP.sql
     webserver:
         image: puckel/docker-airflow:latest
         restart: always
@@ -25,10 +25,10 @@ services:
           - AIRFLOW__CORE__FERNET_KEY=xfaECYb20a2PzNTcIYXFXztTlaEVD43KwUoXeer_83k=
           - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
         volumes:
-          - ./examples/etl-example/dags:/usr/local/airflow/dags
-          - ./examples/etl-example/sql:/usr/local/airflow/sql
-          - ./script:/usr/local/airflow/script
-          - ./examples/etl-example/requirements.txt:/requirements.txt
+          - ./etl_home/etl_base/dags:/usr/local/airflow/dags
+          - ./etl_home/etl_base/sql:/usr/local/airflow/sql
+          - ./etl_home/bin:/usr/local/airflow/bin
+          - ./etl_home/etl_base/requirements.txt:/requirements.txt
         ports:
           - 8080:8080
         command: webserver
