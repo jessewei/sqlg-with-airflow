@@ -8,7 +8,7 @@ from airflow.models import Variable
 
 global sqlg_dag_d
 
-sqlg_dag_d = None 
+# sqlg_dag_d = None 
 
 args = {
     'owner': 'airflow',

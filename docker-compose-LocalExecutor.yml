@@ -28,9 +28,11 @@ services:
           - ./etl_home/etl_base/dags:/usr/local/airflow/dags
           - ./etl_home/etl_base/sql:/usr/local/airflow/sql
           - ./etl_home/bin:/usr/local/airflow/bin
+          - ./etl_home/logs:/usr/local/airflow/logs
           - ./etl_home/etl_base/requirements.txt:/requirements.txt
         ports:
           - 8080:8080
         command: webserver
+        #command: airflow variables -s sql_path "/usr/local/airflow/sql"
 
 
