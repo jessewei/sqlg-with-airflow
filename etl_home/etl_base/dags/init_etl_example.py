@@ -104,7 +104,8 @@ my_taskid = 'DEMO-MERGE'
 demo_ddl_file  = tmpl_search_path + '/' + my_taskid + '.ddl'
 logging.info('demo_ddl_file=' + demo_ddl_file)
 with open( demo_ddl_file, 'r') as myfile:
-    demo_ddl = myfile.read().replace('\n', ' ')
+    demo_ddl = myfile.read()
+#    demo_ddl = myfile.read().replace('\n', ' ')
 
 logging.info('demo_ddl=' + demo_ddl)    
 SQLG_DEMO_DDL = PostgresOperatorWithTemplatedParams(
