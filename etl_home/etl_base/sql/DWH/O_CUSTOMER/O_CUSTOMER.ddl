@@ -1,15 +1,14 @@
 
 DROP TABLE IF EXISTS DWH.O_CUSTOMER;
 CREATE TABLE DWH.O_CUSTOMER (
-       CUSTOMER_ID                             VARCHAR(16) NOT NULL
+       CUSTOMER_ID                             VARCHAR(16)
       ,CUST_NAME                               VARCHAR(20)
       ,STREET                                  VARCHAR(50)
       ,CITY                                    VARCHAR(30)
       ,UPDATED_DTM                             TIMESTAMP
 );
 
---PK Create Script
-ALTER TABLE DWH.O_CUSTOMER ADD CONSTRAINT O_CUSTOMER_PK PRIMARY KEY(CUSTOMER_ID) INITIALLY IMMEDIATE;
+
 
 --Comments Create Script 
 COMMENT ON TABLE DWH.O_CUSTOMER IS 'CUSTOMER';
@@ -21,7 +20,7 @@ COMMENT ON COLUMN DWH.O_CUSTOMER.UPDATED_DTM IS 'UPDATED_DTM';
 
 DROP TABLE IF EXISTS DWH.O_CUSTOMER_TPX;
 CREATE TABLE DWH.O_CUSTOMER_TPX (
-       CUSTOMER_ID                             VARCHAR(16) NOT NULL
+       CUSTOMER_ID                             VARCHAR(16)
       ,CUST_NAME                               VARCHAR(20)
       ,STREET                                  VARCHAR(50)
       ,CITY                                    VARCHAR(30)
@@ -34,15 +33,14 @@ CREATE TABLE DWH.O_CUSTOMER_TPX (
 
 DROP TABLE IF EXISTS DWH.O_CUSTOMER_TP1;
 CREATE TABLE DWH.O_CUSTOMER_TP1 (
-       CUSTOMER_ID                             VARCHAR(16) NOT NULL
+       CUSTOMER_ID                             VARCHAR(16)
       ,CUST_NAME                               VARCHAR(20)
       ,STREET                                  VARCHAR(50)
       ,CITY                                    VARCHAR(30)
       ,UPDATED_DTM                             TIMESTAMP
 );
 
---PK Create Script
-ALTER TABLE DWH.O_CUSTOMER_TP1 ADD CONSTRAINT O_CUSTOMER_TP1_PK PRIMARY KEY(CUSTOMER_ID) INITIALLY IMMEDIATE;
+
 
 --Comments Create Script 
 COMMENT ON TABLE DWH.O_CUSTOMER_TP1 IS 'CUSTOMER_Process Temp Table';
